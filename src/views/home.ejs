@@ -9,7 +9,9 @@
       <h3>Current Playlist</h3>
       <ul>
         <% playlist.forEach(function(playlist){ %>
-          <li><%= playlist.url %></li>
+          <li>
+            <p><img src="<%= playlist.artWork %>"/> <%= playlist.title %></p>
+          </li>
         <%  }); %>
       </ul>
     </div>

@@ -14,8 +14,7 @@ export default class YoutubeProvider {
     return ytdl(url, opt);
   }
 
-  public getInfos  = async (url: string): Promise<YoutubeResponse> => {
-
+  public getInfo  = async (url: string): Promise<YoutubeResponse> => {
     const infos = await ytdl.getInfo(url);
     return new YoutubeResponse(infos);
   }

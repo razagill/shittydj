@@ -1,6 +1,6 @@
 import app from './app';
-import SongModel from './models/SongModel';
 import PlayerCore from './player/PlayerCore';
+import Provider from './providers/Provider';
 const PORT = 4000;
 
 
@@ -14,10 +14,9 @@ app.get('/add', (req, res) => {
   res.render('addSong')
 })
 
-app.post('/queueSong', (req, res) => {
-  const newSong = new SongModel();
-  newSong.url = req.body.songURL;
-  newSong.providerType = req.body.providerType;
+app.post('/queueSong', async (req, res) => {
+  const provider = new Provider();
+  const newSong = await provider.getSong(req.body.songURL, req.body.providerType);
   const player = PlayerCore.getInstance();
   player.addToQueue(newSong);
   // player.play();

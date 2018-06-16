@@ -8,20 +8,23 @@ export default class SongModel {
   url: string;
   providerType: PROVIDERS;
 
-  public mapProviderInfos = (infos: any) => {
+  public static mapProviderInfos = (infos: any, providerType:PROVIDERS, url:string) => {
+    const newSong = new SongModel();
+    newSong.url = url;
 
-    switch (this.providerType) {
+    switch (providerType) {
       case PROVIDERS.BANDCAMP:
-        this.title = infos.title;
-        this.artist = infos.artist;
-        this.album = infos.album;
-        this.artWork = infos.image;
+        newSong.title = infos.title;
+        newSong.artist = infos.artist;
+        newSong.album = infos.album;
+        newSong.artWork = infos.image;
         break;
 
       case PROVIDERS.YOUTUBE:
-        this.title = infos.title;
-        this.artWork = infos.thumbnail_url;
+        newSong.title = infos.title;
+        newSong.artWork = infos.thumbnail_url;
         break;
     }
+    return newSong;
   }
 }

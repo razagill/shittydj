@@ -21,7 +21,7 @@ export default class PlayerCore {
     return PlayerCore.instance;
   }
 
-  private songQueue:SongModel[] = [];
+  public songQueue:SongModel[] = [];
 
   public addToQueue = (song:SongModel) => {
     this.songQueue.push(song);
@@ -40,7 +40,6 @@ export default class PlayerCore {
           songStream = await this.bandcampProvider.getStream(songToPlay.url);
           break;
       }
-      console.log(songStream);
 
       ffmpeg(songStream)
         .format('mp3')

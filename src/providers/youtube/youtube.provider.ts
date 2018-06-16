@@ -1,4 +1,5 @@
 import * as ytdl from 'ytdl-core';
+import YoutubeResponse from 'models/dto/youtubeResponse';
 
 export default class YoutubeProvider {
 
@@ -11,6 +12,12 @@ export default class YoutubeProvider {
     };
 
     return ytdl(url, opt);
+  }
+
+  public getInfos  = async (url: string): Promise<YoutubeResponse> => {
+
+    const infos = await ytdl.getInfo(url);
+    return new YoutubeResponse(infos);
   }
 
 }

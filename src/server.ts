@@ -3,6 +3,7 @@ import SongModel from './models/SongModel';
 import PlayerCore from './player/PlayerCore';
 const PORT = 4000;
 
+
 app.get('/', (req, res) => {
   const player = PlayerCore.getInstance();
   const currentPlaylist = player.songQueue;

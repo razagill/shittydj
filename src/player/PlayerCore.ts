@@ -56,5 +56,6 @@ export default class PlayerCore {
 
   public pause = () => {
 
+    console.log('Pause');
   }
 }

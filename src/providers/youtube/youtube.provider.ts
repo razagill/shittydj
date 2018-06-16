@@ -1,5 +1,5 @@
 import * as ytdl from 'ytdl-core';
-import YoutubeResponse from 'models/dto/youtubeResponse';
+import YoutubeResponse from '../../models/dto/youtubeResponse';
 
 export default class YoutubeProvider {
 

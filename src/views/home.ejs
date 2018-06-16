@@ -2,12 +2,27 @@
 <html>
   <head>
     <% include ./partials/head %>
+    <script>
+      $(function() {
+        $('#playPauseBtn').click(function(e) {
+          var currentState = $(e.target).text();
+          if (currentState === 'Play') {
+            $.get('pause');
+            $(e.target).text('Pause');
+          } else {
+            $.get('play');
+            $(e.target).text('Play');
+          }
+        });
+      });
+    </script>
   </head>
   <body>
     <div class="container">
       <div class="jumbotron">
         <h1>Get this thing to work</h1>
         <p class="lead">...</p>
+        <button type="button" class="btn btn-primary" id="playPauseBtn">Play</button>
       </div>
     </div>
   </body>

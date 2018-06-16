@@ -1,5 +1,5 @@
 import * as bandcamp from 'node-bandcamp';
-import BandcampResponse from 'models/dto/bandcampResponse';
+import BandcampResponse from '../../models/dto/bandcampResponse';
 
 export default class BandcampProvider {
 

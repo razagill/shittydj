@@ -22,6 +22,16 @@ app.post('/queueSong', async (req, res) => {
   // player.play();
 })
 
+app.get('/pause', (req, res) => {
+  const player = PlayerCore.getInstance();
+  player.pause();
+})
+
+app.get('/play', (req, res) => {
+  const player = PlayerCore.getInstance();
+  player.play();
+})
+
 app.listen(PORT, () => {
   console.log('Server listening on port ' + PORT);
 })

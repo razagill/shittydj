@@ -4,12 +4,18 @@ export default class YoutubeProvider {
 
   public getStream = (url: string) => {
 
-    const opt = {
-      filter: (format) => format.container === 'audioonly'
-    };
-    console.log(ytdl(url, opt));
+    return ytdl.getInfo(url, (err, info) => {
+      if (err) throw err;
+      var audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
+      if (audioFormats.length) {
+        const opt = {
+          filter: (format) => format.container === 'audioonly'
+        };
+        return ytdl(audioFormats[0].url, opt);
+      }
+      console.log('Could not find audio format for this link');
+    })
 
-    return ytdl(url, opt);
 
   }
 

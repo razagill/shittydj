@@ -9,10 +9,7 @@ class App {
   constructor() {
     this.app = express();
     this.config();
-    const youtube = new YoutubeProvider();
-    const yts = youtube.getStream('https://www.youtube.com/watch?v=7XkqZsnn2ss&list=RD7XkqZsnn2ss&start_radio=1')
-    const player = new PlayerCore();
-    player.play(yts);
+    this.myFunction();
   }
 
   private config = () => {
@@ -20,6 +17,13 @@ class App {
     this.app.set('view engine', 'ejs')
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
+  }
+
+  private myFunction = async () => {
+    const youtube = new YoutubeProvider();
+    const yts = await youtube.getStream('https://www.youtube.com/watch?v=7XkqZsnn2ss&list=RD7XkqZsnn2ss&start_radio=1');
+    const player = new PlayerCore();
+    player.play(yts);
   }
 }
 export default new App().app;

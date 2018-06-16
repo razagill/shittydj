@@ -5,15 +5,13 @@
   </head>
   <body>
     <div class="container">
-      <div class="jumbotron">
-        <h1>Get this thing to work</h1>
-        <p class="lead">...</p>
-        <ul>
-          <% playlist.forEach(function(playlist){ %>
-            <li><%= playlist.url %></li>
-          <%  }); %>
-        </ul>
-      </div>
+      <h1>Shitty DJ</h1>
+      <h3>Current Playlist</h3>
+      <ul>
+        <% playlist.forEach(function(playlist){ %>
+          <li><%= playlist.url %></li>
+        <%  }); %>
+      </ul>
     </div>
   </body>
 </html>

@@ -1,5 +1,6 @@
 import app from './app';
-import SongModel from '@src/models/SongModel';
+import SongModel from './models/SongModel';
+import PlayerCore from './player/PlayerCore';
 const PORT = 4000;
 
 app.get('/', (req, res) => {
@@ -14,7 +15,9 @@ app.post('/queueSong', (req, res) => {
   const newSong = new SongModel();
   newSong.url = req.body.songURL;
   newSong.providerType = req.body.providerType;
-
+  const player = PlayerCore.getInstance();
+  player.addToQueue(newSong);
+  player.play();
 })
 
 app.listen(PORT, () => {

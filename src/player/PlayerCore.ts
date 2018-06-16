@@ -16,6 +16,8 @@ export default class PlayerCore {
 
   private speaker = new Speaker();
 
+  private isPlaying = false;
+
   static getInstance = () => {
     if (!PlayerCore.instance) {
       PlayerCore.instance = new PlayerCore();
@@ -30,32 +32,32 @@ export default class PlayerCore {
   }
 
   public play = async () => {
-    if (this.songQueue.length > 0) {
-      const songToPlay:SongModel = this.songQueue[0];
-      // Should have a generic provider interface here
-      let songStream;
-      switch (songToPlay.providerType) {
-        case PROVIDERS.YOUTUBE:
-          songStream = await this.youtubeProvider.getStream(songToPlay.url);
-          break;
-        case PROVIDERS.BANDCAMP:
-          songStream = await this.bandcampProvider.getStream(songToPlay.url);
-          break;
+    if (!this.isPlaying) {
+      if (this.songQueue.length > 0) {
+        const songToPlay:SongModel = this.songQueue[0];
+        // Should have a generic provider interface here
+        let songStream;
+        switch (songToPlay.providerType) {
+          case PROVIDERS.YOUTUBE:
+            songStream = await this.youtubeProvider.getStream(songToPlay.url);
+            break;
+          case PROVIDERS.BANDCAMP:
+            songStream = await this.bandcampProvider.getStream(songToPlay.url);
+            break;
+        }
+        ffmpeg(songStream)
+          .format('mp3')
+          .pipe(
+            new lame.Decoder()
+          )
+          .on('format', function (format) {
+            this.pipe(new Speaker(format));
+          });
+        this.isPlaying = true;
+      } else {
+        console.log('No song in queue');
       }
-      console.log(this.songQueue);
-      ffmpeg(songStream)
-        .format('mp3')
-        .pipe(
-          new lame.Decoder()
-        )
-        .on('format', function (format) {
-          this.pipe(new Speaker(format));
-        });
-    } else {
-      console.log('No song in queue');
     }
-
-
   }
 
   public stop = () => {

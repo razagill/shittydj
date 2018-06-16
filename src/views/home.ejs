@@ -8,6 +8,11 @@
       <div class="jumbotron">
         <h1>Get this thing to work</h1>
         <p class="lead">...</p>
+        <ul>
+          <% playlist.forEach(function(playlist){ %>
+            <li><%= playlist.url %></li>
+          <%  }); %>
+        </ul>
       </div>
     </div>
   </body>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ./partials/head %>
+  </head>
+  <body>
+    <div class="container">
+    <form action="/queueSong" method="POST">
+      <div class="form-group">
+        <label for="songURL">Song URL</label>
+        <input type="text" class="form-control" name="songURL" id="songURL" placeholder="Enter song url from Youtube">
+        <select value="youtube" name="providerType">
+          <option value="youtube">Youtbe</option>
+          <option value="bandcamp">BandCamp</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+    </div>
+  </body>
+</html>

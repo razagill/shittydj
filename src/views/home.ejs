@@ -7,10 +7,10 @@
         $('#playPauseBtn').click(function(e) {
           var currentState = $(e.target).text();
           if (currentState === 'Play') {
-            $.get('pause');
             $(e.target).text('Pause');
-          } else {
             $.get('play');
+          } else {
+            $.get('pause');
             $(e.target).text('Play');
           }
         });
@@ -24,7 +24,7 @@
   <body>
     <div class="container">
       <h1>Shitty DJ</h1>
-      <button type="button" class="btn btn-primary" id="playPauseBtn">Pause</button>
+      <button type="button" class="btn btn-primary" id="playPauseBtn">Play</button>
       <button type="button" class="btn btn-primary" id="add">Add track to playlist</button>
       <h3>Current Playlist</h3>
       <ul>

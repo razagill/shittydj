@@ -1,6 +1,7 @@
 const lame = require('lame');
 const Speaker = require('speaker');
 const ffmpeg = require('fluent-ffmpeg');
+// import * as StreamPlayer from 'stream-player';
 
 import SongModel from '../models/SongModel';
 import { YoutubeProvider, BandcampProvider } from '../providers';
@@ -14,7 +15,8 @@ export default class PlayerCore {
   private youtubeProvider = new YoutubeProvider();
   private bandcampProvider = new BandcampProvider();
 
-  private speaker = new Speaker();
+  private ffmpegStream;
+  private speaker;
 
   private isPlaying = false;
 
@@ -32,6 +34,7 @@ export default class PlayerCore {
   }
 
   public play = async () => {
+    const self = this;
     if (!this.isPlaying) {
       if (this.songQueue.length > 0) {
         const songToPlay:SongModel = this.songQueue[0];
@@ -45,14 +48,22 @@ export default class PlayerCore {
             songStream = await this.bandcampProvider.getStream(songToPlay.url);
             break;
         }
-        ffmpeg(songStream)
-          .format('mp3')
-          .pipe(
+        // const player = new StreamPlayer();
+        // player.add(ffmpeg(songStream).format('mp3'));
+
+        // player.add(songStream);
+        // player.play();
+        this.ffmpegStream = ffmpeg(songStream)
+          .format('mp3');
+        this.ffmpegStream.pipe(
             new lame.Decoder()
           )
           .on('format', function (format) {
-            this.pipe(new Speaker(format));
+            self.speaker = new Speaker(format);
+            this.pipe(self.speaker);
           });
+        // this.speaker.on('start', function() {
+        //   this.speaker.kill('SIGSTOP')});
         this.isPlaying = true;
       } else {
         console.log('No song in queue');
@@ -61,6 +72,8 @@ export default class PlayerCore {
   }
 
   public stop = () => {
-    this.speaker.end();
+    this.ffmpegStream.kill('SIGSTOP');
+    this.speaker.close();
+    setTimeout(() => this.ffmpegStream.kill('SIGCONT'), 6000);
   }
 }

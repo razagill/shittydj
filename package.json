@@ -9,7 +9,9 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "speaker": "^0.4.1",
+    "ytdl-core": "^0.20.4"
   },
   "devDependencies": {
     "@types/ejs": "^2.6.0",

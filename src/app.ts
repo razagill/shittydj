@@ -22,6 +22,7 @@ class App {
   private myFunction = async () => {
     const youtube = new YoutubeProvider();
     const yts = await youtube.getStream('https://www.youtube.com/watch?v=7XkqZsnn2ss&list=RD7XkqZsnn2ss&start_radio=1');
+    console.log(yts);
     const player = new PlayerCore();
     player.play(yts);
   }

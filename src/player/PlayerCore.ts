@@ -14,6 +14,8 @@ export default class PlayerCore {
   private youtubeProvider = new YoutubeProvider();
   private bandcampProvider = new BandcampProvider();
 
+  private speaker = new Speaker();
+
   static getInstance = () => {
     if (!PlayerCore.instance) {
       PlayerCore.instance = new PlayerCore();
@@ -47,13 +49,13 @@ export default class PlayerCore {
           new lame.Decoder()
         )
         .on('format', function (format) {
-          this.pipe(new Speaker(format));
+          this.pipe(this.speaker(format));
         });
     }
 
   }
 
-  public pause = () => {
-
+  public stop = () => {
+    this.speaker.end();
   }
 }

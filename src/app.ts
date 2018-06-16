@@ -1,5 +1,7 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
+import YoutubeProvider from './providers/youtube/youtube.provider';
+
 
 class App {
 
@@ -7,6 +9,8 @@ class App {
   constructor() {
     this.app = express();
     this.config();
+    const youtube = new YoutubeProvider();
+    youtube.getStream('https://www.youtube.com/watch?v=7XkqZsnn2ss&list=RD7XkqZsnn2ss&start_radio=1')
   }
 
   private config = () => {

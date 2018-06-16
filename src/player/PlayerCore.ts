@@ -42,16 +42,19 @@ export default class PlayerCore {
           songStream = await this.bandcampProvider.getStream(songToPlay.url);
           break;
       }
-
+      console.log(this.songQueue);
       ffmpeg(songStream)
         .format('mp3')
         .pipe(
           new lame.Decoder()
         )
         .on('format', function (format) {
-          this.pipe(this.speaker(format));
+          this.pipe(new Speaker(format));
         });
+    } else {
+      console.log('No song in queue');
     }
+
 
   }
 

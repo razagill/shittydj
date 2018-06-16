@@ -11,6 +11,7 @@ export default class SongModel {
   public static mapProviderInfos = (infos: any, providerType:PROVIDERS, url:string) => {
     const newSong = new SongModel();
     newSong.url = url;
+    newSong.providerType = providerType;
 
     switch (providerType) {
       case PROVIDERS.BANDCAMP:

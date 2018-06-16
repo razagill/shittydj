@@ -19,17 +19,16 @@ app.post('/queueSong', async (req, res) => {
   const newSong = await provider.getSong(req.body.songURL, req.body.providerType);
   const player = PlayerCore.getInstance();
   player.addToQueue(newSong);
-  // player.play();
 })
 
 app.get('/pause', (req, res) => {
   const player = PlayerCore.getInstance();
-  player.pause();
+  player.stop();
 })
 
-app.get('/play', (req, res) => {
+app.get('/play', async (req, res) => {
   const player = PlayerCore.getInstance();
-  player.play();
+  await player.play();
 })
 
 app.listen(PORT, () => {

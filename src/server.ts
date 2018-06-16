@@ -1,6 +1,7 @@
 import app from './app';
-import SongModel from '@src/models/SongModel';
+import SongModel from './models/SongModel';
 const PORT = 4000;
+
 
 app.get('/', (req, res) => {
   res.render('home')

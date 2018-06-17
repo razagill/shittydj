@@ -39,6 +39,13 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
+"@types/fluent-ffmpeg@^2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@types/fluent-ffmpeg/-/fluent-ffmpeg-2.1.6.tgz#835d1646d65f1c53eef9319ef8ceacf1a13b2a82"
+  dependencies:
+    "@types/events" "*"
+    "@types/node" "*"
+
 "@types/mime@*":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.0.tgz#5a7306e367c539b9f6543499de8dd519fac37a8b"

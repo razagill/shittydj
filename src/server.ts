@@ -1,13 +1,12 @@
 import app from './app';
-import PlayerCore from './player/PlayerCore';
+// import PlayerCore from './player/PlayerCore';
+import Player from './player/Player';
 import Provider from './providers/Provider';
 const PORT = 4000;
-
+const player = Player.getInstance();
 
 app.get('/', (req, res) => {
-  const player = PlayerCore.getInstance();
-  const currentPlaylist = player.songQueue;
-  res.render('home', { playlist: currentPlaylist })
+  res.render('home', { playlist: player.queue})
 })
 
 app.get('/add', (req, res) => {
@@ -17,20 +16,18 @@ app.get('/add', (req, res) => {
 app.post('/queueSong', async (req, res) => {
   const provider = new Provider();
   const newSong = await provider.getSong(req.body.songURL, req.body.providerType);
-  const player = PlayerCore.getInstance();
-  player.addToQueue(newSong);
+  player.add(newSong);
   res.redirect('/');
 })
 
 app.get('/pause', (req, res) => {
-  const player = PlayerCore.getInstance();
-  player.stop();
+  player.pause();
+  res.sendStatus(200);
 })
 
 app.get('/play', async (req, res) => {
-  const player = PlayerCore.getInstance();
   await player.play();
-  res.send(200);
+  res.sendStatus(200);
 })
 
 app.listen(PORT, () => {

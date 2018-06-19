@@ -1,18 +1,15 @@
 const lame = require('lame');
 const Speaker = require('speaker');
-
 import * as ffmpeg from 'fluent-ffmpeg';
 
+// Utils
+import { logger } from '../toolkit/util';
+// Constants
+import { PROVIDERS } from '../toolkit/const';
+// Models
 import SongModel from '../models/SongModel';
 import { YoutubeProvider, BandcampProvider } from '../providers';
-import { PROVIDERS } from '../toolkit/const';
-import { logger } from '../toolkit/util';
-
-const audioOptions = {
-  channels: 2,
-  bitDepth: 16,
-  mode: lame.STEREO
-};
+// Interfaces
 
 export default class Player {
   private constructor() {}
@@ -28,11 +25,9 @@ export default class Player {
   private youtubeProvider = new YoutubeProvider();
   private bandcampProvider = new BandcampProvider();
 
-  // private ffmpegStream;
   private speaker;
   private decoder;
   private stream;
-  private ffmpegStream;
 
   private isPlaying = false;
   private currentSong:SongModel;
@@ -43,11 +38,11 @@ export default class Player {
       this.resume();
     } else if (this.queue.length > 0 && !this.isPlaying) {
       const nextSong:SongModel = this.queue[0];
-      this.ffmpegStream = await this.getStream(nextSong.url, nextSong.providerType);
-      this.stream = this.playStream(this.ffmpegStream);
+      const songStream = await this.getStream(nextSong.url, nextSong.providerType);
+      this.stream = this.playStream(songStream);
       this.isPlaying = true;
       this.currentSong = nextSong;
-      // shift the queue
+      this.queue.shift();
     } else if (this.isPlaying) {
       // return error
       logger('# Already playing a song mofo');
@@ -59,27 +54,33 @@ export default class Player {
 
   public resume = () => {
     logger('# Resuming song...')
-    this.speaker = new Speaker(audioOptions);
+    this.speaker = new Speaker();
     this.stream.pipe(this.speaker);
     this.isPlaying = true;
     this.speaker.on('close', () => {
       logger('# Speaker closed...')
       this.speaker.end();
-      // load next song
+      this.playNextSong();
     })
     logger('# Song resumed...')
   }
 
-  public pause = () => {
+  public pause = async () => {
     logger('# Pausing song...')
     this.isPlaying = false;
     this.stream.unpipe(this.speaker);
-    this.speaker.close();
+
+    // Hack to avoid speaker audio ring buffer error
+    setTimeout(() => this.speaker.close(), 500);
     logger('# Song paused...')
   }
 
   public add = (song:SongModel) => {
     this.queue.push(song);
+  }
+
+  public getCurrentSong = () => {
+    return this.currentSong;
   }
 
   private getStream = async (url:string, type:PROVIDERS) => {
@@ -92,25 +93,27 @@ export default class Player {
         songStream = await this.bandcampProvider.getStream(url);
         break;
     }
-    return ffmpeg(songStream).format('mp3').on('end', () => console.log('ffmpge finished'));
+    return ffmpeg(songStream)
+      .format('mp3')
+      .on('end', () => logger('# ffmpeg finished...'));
   }
 
   private playStream = (stream:any) => {
     this.decoder = new lame.Decoder();
-    this.speaker = new Speaker(audioOptions);
+    this.speaker = new Speaker();
     return stream.pipe(this.decoder).once('format', () => {
       this.decoder.pipe(this.speaker);
       this.speaker.on('close', () => {
         logger('# Speaker closed...')
         this.speaker.end();
-        // load next song
+        this.playNextSong();
       })
     })
   }
 
-  // private playNextSong = () => {
-  //   this.currentSong = null;
-  //   this.isPlaying = false;
-  //   return this.play();
-  // }
+  private playNextSong = () => {
+    this.currentSong = null;
+    this.isPlaying = false;
+    return this.play();
+  }
 }

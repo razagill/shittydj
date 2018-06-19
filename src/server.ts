@@ -20,8 +20,8 @@ app.post('/queueSong', async (req, res) => {
   res.redirect('/');
 })
 
-app.get('/pause', (req, res) => {
-  player.pause();
+app.get('/pause', async (req, res) => {
+  await player.pause();
   res.sendStatus(200);
 })
 

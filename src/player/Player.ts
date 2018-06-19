@@ -6,6 +6,7 @@ import * as ffmpeg from 'fluent-ffmpeg';
 import SongModel from '../models/SongModel';
 import { YoutubeProvider, BandcampProvider } from '../providers';
 import { PROVIDERS } from '../toolkit/const';
+import { logger } from '../toolkit/util';
 
 const audioOptions = {
   channels: 2,
@@ -31,7 +32,7 @@ export default class Player {
   private speaker;
   private decoder;
   private stream;
-  private songStream;
+  private ffmpegStream;
 
   private isPlaying = false;
   private currentSong:SongModel;
@@ -39,43 +40,42 @@ export default class Player {
 
   public play = async () => {
     if (this.currentSong) {
-      console.log('resuming the song');
       this.resume();
     } else if (this.queue.length > 0 && !this.isPlaying) {
       const nextSong:SongModel = this.queue[0];
-      this.songStream = await this.getStream(nextSong.url, nextSong.providerType);
-      this.stream = this.playStream(this.songStream);
+      this.ffmpegStream = await this.getStream(nextSong.url, nextSong.providerType);
+      this.stream = this.playStream(this.ffmpegStream);
       this.isPlaying = true;
       this.currentSong = nextSong;
       // shift the queue
     } else if (this.isPlaying) {
       // return error
-      console.log('Already playing a song mofo');
+      logger('# Already playing a song mofo');
     } else {
       // return error
-      console.log('queue is empty');
+      logger('# Queue is empty');
     }
   }
 
   public resume = () => {
+    logger('# Resuming song...')
     this.speaker = new Speaker(audioOptions);
-    this.decoder.pipe(this.speaker);
-    this.stream.resume();
+    this.stream.pipe(this.speaker);
     this.isPlaying = true;
-    return this.speaker.once('close', () => {
-      console.log('speaker closed');
-      // load next song?
+    this.speaker.on('close', () => {
+      logger('# Speaker closed...')
+      this.speaker.end();
+      // load next song
     })
-
-    // this.playStream(this.songStream);
+    logger('# Song resumed...')
   }
 
   public pause = () => {
+    logger('# Pausing song...')
     this.isPlaying = false;
-    this.speaker.removeAllListeners('close');
-    this.stream.unpipe(this.decoder).unpipe(this.speaker);
-    this.stream.pause();
+    this.stream.unpipe(this.speaker);
     this.speaker.close();
+    logger('# Song paused...')
   }
 
   public add = (song:SongModel) => {
@@ -99,8 +99,10 @@ export default class Player {
     this.decoder = new lame.Decoder();
     this.speaker = new Speaker(audioOptions);
     return stream.pipe(this.decoder).once('format', () => {
-      this.decoder.pipe(this.speaker);  // why this line
-      return this.speaker.once('close', () => {
+      this.decoder.pipe(this.speaker);
+      this.speaker.on('close', () => {
+        logger('# Speaker closed...')
+        this.speaker.end();
         // load next song
       })
     })

@@ -6,11 +6,7 @@ const PORT = 4000;
 const player = Player.getInstance();
 
 app.get('/', (req, res) => {
-  res.render('home', { playlist: player.queue})
-})
-
-app.get('/add', (req, res) => {
-  res.render('addSong')
+  res.render('home', { playlist: player.queue, currentSong: player.getCurrentSong() })
 })
 
 app.post('/queueSong', async (req, res) => {
@@ -28,6 +24,16 @@ app.get('/pause', async (req, res) => {
 app.get('/play', async (req, res) => {
   await player.play();
   res.sendStatus(200);
+})
+
+app.get('/getCurrentSong', async (req, res) => {
+  const currentSong = player.getCurrentSong();
+  if (currentSong) {
+    res.sendStatus(200);
+    res.json(res.json(currentSong));
+  } else {
+    res.sendStatus(204);
+  }
 })
 
 app.listen(PORT, () => {

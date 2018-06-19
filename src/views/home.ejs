@@ -1,39 +1,108 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <% include ./partials/head %>
+<html lang="en">
+<head>
+  <% include ./partials/head %>
     <script>
-      $(function() {
-        $('#playPauseBtn').click(function(e) {
-          var currentState = $(e.target).text();
-          if (currentState === 'Play') {
-            $(e.target).text('Pause');
-            $.get('play');
+      $(function () {
+        const playPauseButton = $('#playPauseButton');
+        // ON LOAD, CHECK IF ANY SONG IS PLAYING
+        let isPlaying = false;
+        $.get('getCurrentSong', (res) => {
+          isPlaying = (res === 'OK');
+        });
+
+        // PLAY/PAUSE BUTTON ACTION
+        playPauseButton.click(() => {
+          if (isPlaying) {
+            $.get('pause').then(() => {
+              setTimeout(() => setTimeout(() => location.reload()), 500);
+            });
           } else {
-            $.get('pause');
-            $(e.target).text('Play');
+            $.get('play').then(() => location.reload());
           }
         });
 
-        $('#add').click(function() {
-          window.location = window.location.origin + '/add';
-        })
+
+        // BOF DEBUG
+        /*
+        $('#addTestSong').click(function () {
+          $.post('queueSong', { providerType: 'youtube', songURL: 'https://www.youtube.com/watch?v=hwZNL7QVJjE' });
+        });
+        */
+        // EOF DEBUG
       });
     </script>
-  </head>
-  <body>
+</head>
+
+<body>
+  <% include ./partials/header %>
     <div class="container">
-      <h1>Shitty DJ</h1>
-      <button type="button" class="btn btn-primary" id="playPauseBtn">Play</button>
-      <button type="button" class="btn btn-primary" id="add">Add track to playlist</button>
-      <h3>Current Playlist</h3>
-      <ul>
-        <% playlist.forEach(function(playlist){ %>
-          <li>
-            <p><img src="<%= playlist.artWork %>"/> <%= playlist.title %></p>
-          </li>
-        <%  }); %>
-      </ul>
+
+      <!-- BOF DEBUG -->
+      <!--
+      <div class="clearfix">
+        <button id="addTestSong" class="btn btn-sm float-right btn-secondary">add test song</button>
+      </div>
+      -->
+      <!-- EOF DEBUG -->
+
+      <h3 class="mt-2 clearfix">
+        Playlist
+        <button class="button-plus float-right clearfix" data-toggle="modal" data-target="#addToPlaylistModal">
+          <div>
+            <span>&#10133;</span>
+          </div>
+          Add song
+        </button>
+      </h3>
+      <% playlist.forEach(function(playlist){ %>
+        <div class="media mb-3">
+          <img class="align-self-center mr-3" src="<%= playlist.artWork %>" alt="<%= playlist.title %>">
+          <div class="media-body">
+            <h5 class="mt-0">
+              <%= playlist.title %>
+            </h5>
+            <% if(playlist.artist){ %>
+              <p>
+                <%= playlist.artist %>
+              </p>
+            <% } %>
+            <% if(playlist.album){ %>
+              <p><%= playlist.album %></p>
+            <% } %>
+          </div>
+        </div>
+        <% }); %>
+
+        <% if(playlist.length === 0){ %>
+          <p class="text-muted">No songs in playlist</p>
+        <% } %>
+
+        <!-- Modal -->
+        <% include ./partials/addSongModal %>
+      </div>
     </div>
-  </body>
+    <footer class="footer">
+      <div class="container">
+        <div class="clearfix">
+          <div class="footer-ico float-left" id="playPauseButton">
+
+            <% if(currentSong){ %>
+              <span class="pause-ico">&#8545;</span>
+            <% } else{ %>
+              <span class="play-ico">&#9658;</span>
+            <% } %>
+          </div>
+          <div class="pull-left song-name">
+            <% if (currentSong) { %>
+              <span>
+                <img src="<%= currentSong.artWork %>" alt="thumb" />
+                <%= currentSong.title %>
+              </span>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </footer>
+</body>
 </html>

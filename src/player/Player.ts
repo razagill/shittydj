@@ -60,7 +60,7 @@ export default class Player {
     this.speaker.on('close', () => {
       logger('# Speaker closed...')
       this.speaker.end();
-      this.playNextSong();
+      // this.playNextSong();
     })
     logger('# Song resumed...')
   }
@@ -71,7 +71,7 @@ export default class Player {
     this.stream.unpipe(this.speaker);
 
     // Hack to avoid speaker audio ring buffer error
-    setTimeout(() => this.speaker.close(), 500);
+    setTimeout(() => this.speaker.close(), 1000);
     logger('# Song paused...')
   }
 
@@ -95,7 +95,14 @@ export default class Player {
     }
     return ffmpeg(songStream)
       .format('mp3')
-      .on('end', () => logger('# ffmpeg finished...'));
+      .on('end', () => {
+        logger('# ffmpeg finished...');
+        this.stream.unpipe();
+        setTimeout(() => {
+          this.speaker.close()
+          this.playNextSong();
+        }, 1000);
+      });
   }
 
   private playStream = (stream:any) => {
@@ -106,12 +113,13 @@ export default class Player {
       this.speaker.on('close', () => {
         logger('# Speaker closed...')
         this.speaker.end();
-        this.playNextSong();
+        // this.playNextSong();
       })
     })
   }
 
   private playNextSong = () => {
+
     this.currentSong = null;
     this.isPlaying = false;
     return this.play();

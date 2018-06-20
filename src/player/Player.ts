@@ -57,6 +57,7 @@ export default class Player {
 
   private getFFmpegStream = (stream:any) =>
     ffmpeg(stream)
+      .audioFrequency(44100)
       .format('mp3')
       .on('end', () => logger('# ffmpeg finished...'));
 

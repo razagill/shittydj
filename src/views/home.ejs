@@ -101,12 +101,10 @@
       <div class="container">
         <di class="clearfix">
           <div class="footer-ico float-left" id="playPauseButton"></div>
-          <div class="pull-left footer-song-name">
+          <div class="pull-left footer-song-part">
             <% if (currentSong) { %>
-              <span>
-                <img src="<%= currentSong.artWork %>" alt="thumb" class="ml-3 mr-3" />
-                <%= currentSong.title %>
-              </span>
+                <div style="width:80"><img src="<%= currentSong.artWork %>" alt="thumb" class="ml-3 mr-3 pull-left" /></div>
+                <div class="pull-left footer-song-name"><%= currentSong.title %></div>
             <% } %>
           </div>
           <div class="footer-ico pull-right" onClick="window.location.reload()">

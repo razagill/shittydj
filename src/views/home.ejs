@@ -29,13 +29,10 @@
             $.get('pause').then(() => {
               isPlaying = false;
               setPlayerBtnHTML(isPlaying);
-              // location.reload();
-              // setTimeout(() => setTimeout(() => location.reload()), 500);
             });
           } else {
             $.get('play').then(() => {
               isPlaying = true;
-              // setPlayerBtnHTML(isPlaying);
               location.reload()
             });
           }
@@ -66,17 +63,17 @@
       <!-- EOF DEBUG -->
 
       <h3 class="mt-2 clearfix">
-        Playlist
+        Upcoming
         <button class="button-plus float-right clearfix" data-toggle="modal" data-target="#addToPlaylistModal">
           <div>
-            <span>&#10133;</span>
+            <span>+</span>
           </div>
           Add song
         </button>
       </h3>
       <% playlist.forEach(function(playlist){ %>
         <div class="media mb-3">
-          <img class="align-self-center mr-3" src="<%= playlist.artWork %>" alt="<%= playlist.title %>">
+          <img class="align-self-center mr-3" class="upcoming-img" src="<%= playlist.artWork %>" alt="<%= playlist.title %>">
           <div class="media-body">
             <h5 class="mt-0">
               <%= playlist.title %>

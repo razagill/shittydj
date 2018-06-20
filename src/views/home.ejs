@@ -10,12 +10,13 @@
         $.get('getCurrentSong', (res) => {
           isPlaying = (res === 'OK');
         });
+        console.log(isPlaying);
 
         // PLAY/PAUSE BUTTON ACTION
         playPauseButton.click(() => {
           if (isPlaying) {
             $.get('pause').then(() => {
-              setTimeout(() => setTimeout(() => location.reload()), 500);
+              // setTimeout(() => setTimeout(() => location.reload()), 500);
             });
           } else {
             $.get('play').then(() => location.reload());

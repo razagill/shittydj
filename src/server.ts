@@ -29,8 +29,7 @@ app.get('/play', async (req, res) => {
 app.get('/getCurrentSong', async (req, res) => {
   const currentSong = player.getCurrentSong();
   if (currentSong) {
-    res.sendStatus(200);
-    res.json(res.json(currentSong));
+    res.send(JSON.stringify(currentSong));
   } else {
     res.sendStatus(204);
   }

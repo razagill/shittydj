@@ -28,18 +28,67 @@ export default class Player {
   private speaker;
   private decoder;
   private stream;
-
   private isPlaying = false;
   private currentSong:SongModel;
+  private SPEAKER_CLOSE_WAIT = 500;
+
   public queue:SongModel[] = [];
+
+  private closeStream = () => {
+    this.stream.unpipe(this.speaker);
+
+    // Hack to avoid speaker audio ring buffer error
+    setTimeout(() => this.speaker.close(), this.SPEAKER_CLOSE_WAIT);
+  }
+
+  private handleSpeakerClose = () => {
+    logger('# Speaker closed...')
+    this.speaker.end();
+    this.playNextSong();
+  }
+
+  private getProviderStream = async (url:string, type:PROVIDERS) => {
+    switch (type) {
+      case PROVIDERS.YOUTUBE:
+        return await this.youtubeProvider.getStream(url);
+      case PROVIDERS.BANDCAMP:
+        return await this.bandcampProvider.getStream(url);
+    }
+  }
+
+  private getFFmpegStream = (stream:any) =>
+    ffmpeg(stream)
+      .format('mp3')
+      .on('end', () => logger('# ffmpeg finished...'));
+
+  private playStream = (stream:any) => {
+    this.decoder = new lame.Decoder();
+    this.speaker = new Speaker();
+    return stream
+      .pipe(this.decoder)
+      .on('format', () => {
+        this.decoder.pipe(this.speaker);
+        this.speaker.on('close', () => this.handleSpeakerClose());
+      })
+      .on('finish', () => {
+        logger('# Stream finished...');
+        this.closeStream();
+      })
+  }
+
+  private playNextSong = () => {
+    this.currentSong = null;
+    this.isPlaying = false;
+    return this.play();
+  }
 
   public play = async () => {
     if (this.currentSong) {
       this.resume();
     } else if (this.queue.length > 0 && !this.isPlaying) {
       const nextSong:SongModel = this.queue[0];
-      const songStream = await this.getStream(nextSong.url, nextSong.providerType);
-      this.stream = this.playStream(songStream);
+      const providerStream = await this.getProviderStream(nextSong.url, nextSong.providerType);
+      this.stream = this.playStream(this.getFFmpegStream(providerStream));
       this.isPlaying = true;
       this.currentSong = nextSong;
       this.queue.shift();
@@ -57,21 +106,14 @@ export default class Player {
     this.speaker = new Speaker();
     this.stream.pipe(this.speaker);
     this.isPlaying = true;
-    this.speaker.on('close', () => {
-      logger('# Speaker closed...')
-      this.speaker.end();
-      this.playNextSong();
-    })
+    this.speaker.on('close', () => this.handleSpeakerClose());
     logger('# Song resumed...')
   }
 
   public pause = async () => {
     logger('# Pausing song...')
     this.isPlaying = false;
-    this.stream.unpipe(this.speaker);
-
-    // Hack to avoid speaker audio ring buffer error
-    setTimeout(() => this.speaker.close(), 500);
+    this.closeStream();
     logger('# Song paused...')
   }
 
@@ -81,39 +123,5 @@ export default class Player {
 
   public getCurrentSong = () => {
     return this.currentSong;
-  }
-
-  private getStream = async (url:string, type:PROVIDERS) => {
-    let songStream;
-    switch (type) {
-      case PROVIDERS.YOUTUBE:
-        songStream = await this.youtubeProvider.getStream(url);
-        break;
-      case PROVIDERS.BANDCAMP:
-        songStream = await this.bandcampProvider.getStream(url);
-        break;
-    }
-    return ffmpeg(songStream)
-      .format('mp3')
-      .on('end', () => logger('# ffmpeg finished...'));
-  }
-
-  private playStream = (stream:any) => {
-    this.decoder = new lame.Decoder();
-    this.speaker = new Speaker();
-    return stream.pipe(this.decoder).once('format', () => {
-      this.decoder.pipe(this.speaker);
-      this.speaker.on('close', () => {
-        logger('# Speaker closed...')
-        this.speaker.end();
-        this.playNextSong();
-      })
-    })
-  }
-
-  private playNextSong = () => {
-    this.currentSong = null;
-    this.isPlaying = false;
-    return this.play();
   }
 }

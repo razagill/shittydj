@@ -123,7 +123,14 @@ export default class Player {
   }
 
   public add = (song:SongModel) => {
-    this.queue.push(song);
+    const songURLs = this.queue.map((song) => song.url);
+    // Check if song is already there
+    if (!songURLs.includes(song.url)) {
+      this.queue.push(song);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public getCurrentSong = () => {

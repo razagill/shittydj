@@ -12,8 +12,11 @@ app.get('/', (req, res) => {
 app.post('/queueSong', async (req, res) => {
   const provider = new Provider();
   const newSong = await provider.getSong(req.body.songURL, req.body.providerType);
-  player.add(newSong);
-  res.redirect('/');
+  if (player.add(newSong)) {
+    res.redirect('/');
+  } else {
+    res.send(JSON.stringify('Song already in list'));
+  }
 })
 
 app.get('/pause', async (req, res) => {

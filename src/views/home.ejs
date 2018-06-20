@@ -62,7 +62,7 @@
       -->
       <!-- EOF DEBUG -->
 
-      <h3 class="mt-2 clearfix">
+      <h3 class="mt-2 mb-4 clearfix">
         Upcoming
         <button class="button-plus float-right clearfix" data-toggle="modal" data-target="#addToPlaylistModal">
           <div>
@@ -100,16 +100,18 @@
     </div>
     <footer class="footer">
       <div class="container">
-        <div class="clearfix">
-          <div class="footer-ico float-left" id="playPauseButton">
-          </div>
-          <div class="pull-left song-name">
+        <di class="clearfix">
+          <div class="footer-ico float-left" id="playPauseButton"></div>
+          <div class="pull-left footer-song-name">
             <% if (currentSong) { %>
               <span>
                 <img src="<%= currentSong.artWork %>" alt="thumb" />
                 <%= currentSong.title %>
               </span>
             <% } %>
+          </div>
+          <div class="footer-ico pull-right" onClick="window.location.reload()">
+            <i class="fa fa-refresh"></i>
           </div>
         </div>
       </div>

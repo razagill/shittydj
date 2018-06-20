@@ -68,12 +68,14 @@ export default class Player {
       .pipe(this.decoder)
       .on('format', () => {
         this.decoder.pipe(this.speaker);
-        this.speaker.on('close', () => this.handleSpeakerClose());
+        this.speaker.on('close', () => {
+          this.handleSpeakerClose()
+        });
       })
       .on('finish', () => {
         logger('# Stream finished...');
         this.closeStream();
-        this.playNextSong();
+        setTimeout(() => this.playNextSong(), 2000);
       })
   }
 
@@ -107,7 +109,9 @@ export default class Player {
     this.speaker = new Speaker();
     this.stream.pipe(this.speaker);
     this.isPlaying = true;
-    this.speaker.on('close', () => this.handleSpeakerClose());
+    this.speaker.on('close', () => {
+      this.handleSpeakerClose()
+    });
     logger('# Song resumed...')
   }
 

@@ -74,9 +74,9 @@
         <div class="media mb-3">
           <img class="align-self-center mr-3" class="upcoming-img" src="<%= playlist.artWork %>" alt="<%= playlist.title %>">
           <div class="media-body">
-            <h5 class="mt-0">
+            <h6 class="mt-0">
               <%= playlist.title %>
-            </h5>
+            </h6>
             <% if(playlist.artist){ %>
               <p>
                 <%= playlist.artist %>
@@ -104,7 +104,7 @@
           <div class="pull-left footer-song-name">
             <% if (currentSong) { %>
               <span>
-                <img src="<%= currentSong.artWork %>" alt="thumb" />
+                <img src="<%= currentSong.artWork %>" alt="thumb" class="ml-3 mr-3" />
                 <%= currentSong.title %>
               </span>
             <% } %>

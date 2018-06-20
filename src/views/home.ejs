@@ -4,11 +4,11 @@
   <% include ./partials/head %>
     <script>
       function getPlayerIcon(isPlaying) {
-        return isPlaying ? '&#8545;' : '&#9658;';
+        return isPlaying ? 'pause' : 'play';
       }
 
       function setPlayerBtnHTML(isPlaying) {
-        var playerBtnHTML = "<span>"+getPlayerIcon(isPlaying)+"</span>";
+        var playerBtnHTML = `<i class="fa fa-${getPlayerIcon(isPlaying)}"></i>`;
         $('#playPauseButton').html(playerBtnHTML);
       }
 
@@ -66,7 +66,7 @@
         Upcoming
         <button class="button-plus float-right clearfix" data-toggle="modal" data-target="#addToPlaylistModal">
           <div>
-            <span>+</span>
+            <i class="fa fa-plus"></i>
           </div>
           Add song
         </button>

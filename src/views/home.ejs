@@ -72,7 +72,7 @@
       </h4>
       <% playlist.forEach(function(playlist){ %>
         <div class="media mb-3">
-          <img class="align-self-center mr-3" class="upcoming-img" src="<%= playlist.artWork %>" alt="<%= playlist.title %>">
+          <img class="align-self-center mr-3 upcoming-img" src="<%= playlist.artWork %>" alt="<%= playlist.title %>">
           <div class="media-body">
             <h6 class="mt-0">
               <%= playlist.title %>
@@ -103,7 +103,7 @@
           <div class="footer-ico float-left" id="playPauseButton"></div>
           <div class="pull-left footer-song-part">
             <% if (currentSong) { %>
-                <div style="width:80"><img src="<%= currentSong.artWork %>" alt="thumb" class="ml-3 mr-3 pull-left" /></div>
+                <img src="<%= currentSong.artWork %>" alt="thumb" class="ml-3 mr-3 pull-left" />
                 <div class="pull-left footer-song-name"><%= currentSong.title %></div>
             <% } %>
           </div>

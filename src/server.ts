@@ -35,6 +35,11 @@ app.get('/getCurrentSong', async (req, res) => {
   }
 })
 
+app.get('/eliteSkip', (req, res) => {
+  player.skipTrack();
+  res.sendStatus(200);
+})
+
 app.listen(PORT, () => {
   console.log('Server listening on port ' + PORT);
 })

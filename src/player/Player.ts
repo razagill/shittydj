@@ -129,4 +129,10 @@ export default class Player {
   public getCurrentSong = () => {
     return this.currentSong;
   }
+
+  public skipTrack = () => {
+    this.closeStream();
+    setTimeout(() => this.playNextSong(), 2000);
+    logger('# Song skipped');
+  }
 }

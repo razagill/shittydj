@@ -3,26 +3,44 @@
 <head>
   <% include ./partials/head %>
     <script>
+      function getPlayerIcon(isPlaying) {
+        return isPlaying ? '&#8545;' : '&#9658;';
+      }
+
+      function setPlayerBtnHTML(isPlaying) {
+        var playerBtnHTML = "<span>"+getPlayerIcon(isPlaying)+"</span>";
+        $('#playPauseButton').html(playerBtnHTML);
+      }
+
       $(function () {
         const playPauseButton = $('#playPauseButton');
         // ON LOAD, CHECK IF ANY SONG IS PLAYING
         let isPlaying = false;
         $.get('getCurrentSong', (res) => {
-          isPlaying = (res === 'OK');
+          if (res) { // If there is any JSON, it means we have something playing
+            isPlaying = true;
+            setPlayerBtnHTML(isPlaying);
+          }
         });
-        console.log(isPlaying);
 
         // PLAY/PAUSE BUTTON ACTION
         playPauseButton.click(() => {
           if (isPlaying) {
             $.get('pause').then(() => {
+              isPlaying = false;
+              setPlayerBtnHTML(isPlaying);
+              // location.reload();
               // setTimeout(() => setTimeout(() => location.reload()), 500);
             });
           } else {
-            $.get('play').then(() => location.reload());
+            $.get('play').then(() => {
+              isPlaying = true;
+              setPlayerBtnHTML(isPlaying);
+              // location.reload()
+            });
           }
         });
-
+        setPlayerBtnHTML(isPlaying);
 
         // BOF DEBUG
         /*
@@ -87,12 +105,6 @@
       <div class="container">
         <div class="clearfix">
           <div class="footer-ico float-left" id="playPauseButton">
-
-            <% if(currentSong){ %>
-              <span class="pause-ico">&#8545;</span>
-            <% } else{ %>
-              <span class="play-ico">&#9658;</span>
-            <% } %>
           </div>
           <div class="pull-left song-name">
             <% if (currentSong) { %>

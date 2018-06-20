@@ -44,7 +44,6 @@ export default class Player {
   private handleSpeakerClose = () => {
     logger('# Speaker closed...')
     this.speaker.end();
-    this.playNextSong();
   }
 
   private getProviderStream = async (url:string, type:PROVIDERS) => {
@@ -73,6 +72,7 @@ export default class Player {
       .on('finish', () => {
         logger('# Stream finished...');
         this.closeStream();
+        this.playNextSong();
       })
   }
 

@@ -1,5 +1,6 @@
 const lame = require('lame');
 const Speaker = require('speaker');
+const loudness = require('loudness');
 import * as ffmpeg from 'fluent-ffmpeg';
 
 // Utils
@@ -141,5 +142,23 @@ export default class Player {
     this.closeStream();
     setTimeout(() => this.playNextSong(), 2000);
     logger('# Song skipped');
+  }
+
+  public increaseVolume = () => {
+    loudness.getVolume((err, vol) => {
+      vol += 5;
+      loudness.setVolume(vol, () => {
+        console.log('setted Volume to', vol)
+      });
+    });
+  }
+
+  public decreaseVolume = () => {
+    loudness.getVolume((err, vol) => {
+      vol -= 5;
+      loudness.setVolume(vol, () => {
+        console.log('setted Volume to', vol)
+      });
+    });
   }
 }

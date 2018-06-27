@@ -43,6 +43,16 @@ app.get('/eliteSkip', (req, res) => {
   res.sendStatus(200);
 })
 
+app.get('/increaseVol', (req, res) => {
+  player.increaseVolume();
+  res.send(200);
+})
+
+app.get('/decreaseVol', (req, res) => {
+  player.decreaseVolume();
+  res.send(200);
+})
+
 app.listen(PORT, () => {
   console.log('Server listening on port ' + PORT);
 })

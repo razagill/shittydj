@@ -39,6 +39,16 @@
         });
         setPlayerBtnHTML(isPlaying);
 
+        const decreaseVolumeButton = $('#decreaseVolumeButton');
+        decreaseVolumeButton.click(() => {
+          $.get('decreaseVol');
+        });
+
+        const increaseVolumeButton = $('#increaseVolumeButton');
+        increaseVolumeButton.click(() => {
+          $.get('increaseVol');
+        });
+
         // BOF DEBUG
         /*
         $('#addTestSong').click(function () {
@@ -109,6 +119,12 @@
           </div>
           <div class="footer-ico pull-right" onClick="window.location.reload()">
             <i class="fa fa-refresh"></i>
+          </div>
+          <div class="footer-ico pull-right" id="increaseVolumeButton">
+            <i class="fa fa-volume-up"></i>
+          </div>
+          <div class="footer-ico pull-right" id="decreaseVolumeButton">
+            <i class="fa fa-volume-down"></i>
           </div>
         </div>
       </div>

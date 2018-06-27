@@ -15,6 +15,7 @@
     "express": "^4.16.3",
     "fluent-ffmpeg": "^2.1.2",
     "lame": "^1.2.4",
+    "loudness": "^0.2.2",
     "node-bandcamp": "^0.0.6",
     "speaker": "^0.4.1",
     "tslib": "^1.9.2",

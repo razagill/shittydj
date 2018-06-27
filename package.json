@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "main": "src/server.ts",
   "scripts": {
+    "clean": "rm -rf build",
+    "build": "npm run clean && tsc",
     "dev": "ts-node ./src/server.ts"
   },
   "license": "MIT",
   "dependencies": {
+    "app-root-path": "^2.1.0",
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.3",

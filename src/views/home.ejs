@@ -79,6 +79,11 @@
             <i class="fa fa-plus"></i>
           </div>
         </button>
+        <button class="button-plus float-right clearfix" data-toggle="modal" data-target="#createPlaylistModal">
+          <div>
+            <i class="fa fa-upload"></i>
+          </div>
+        </button>
       </h4>
       <% playlist.forEach(function(playlist){ %>
         <div class="media mb-3">
@@ -105,6 +110,7 @@
 
         <!-- Modal -->
         <% include ./partials/addSongModal %>
+        <% include ./partials/addPlaylistModal%>
       </div>
     </div>
     <footer class="footer">

@@ -1,5 +1,6 @@
-import * as express from "express";
-import * as bodyParser from "body-parser";
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as fileUpload from 'express-fileupload';
 import * as rootPath from 'app-root-path';
 
 class App {
@@ -15,6 +16,9 @@ class App {
     this.app.set('view engine', 'ejs')
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(fileUpload({
+      limits: { fileSize: 50 * 1024 * 1024 }
+    }));
   }
 
 }

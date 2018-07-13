@@ -1,7 +1,8 @@
 import app from './app';
-// import PlayerCore from './player/PlayerCore';
+import * as rootPath from 'app-root-path';
 import Player from './player/Player';
 import Provider from './providers/Provider';
+import * as fs from 'fs';
 const PORT = 4000;
 const player = Player.getInstance();
 
@@ -51,6 +52,24 @@ app.get('/increaseVol', (req, res) => {
 app.get('/decreaseVol', (req, res) => {
   player.decreaseVolume();
   res.send(200);
+})
+
+app.post('/createPlaylist', async (req, res) => {
+  if (!req.files || !req.files.playlist) return res.status(400).send('No file uploaded');
+  if (!req.body.name || req.body.name === '') return res.status(400).send('No valid name for playlist');
+  if (( req.files.playlist as any ).mimetype !== 'text/plain') return res.status(400).send('Please just upload txt files');
+
+  const existingPlaylists = fs.readdirSync(`${rootPath}/src/playlists/`);
+  const file = req.files.playlist as any;
+  const name = req.body.name;
+  if (existingPlaylists.includes(name)) return res.status(400).send(`Playlist name ${name} is already taken`);
+
+  try {
+    await file.mv(`${rootPath}/src/playlists/${name}`);
+    res.redirect('/');
+  } catch (er) {
+    res.status(500).send(er)
+  }
 })
 
 app.listen(PORT, () => {

@@ -6,4 +6,5 @@ dist
 .DS_STORE
 lib
 build
-src/playlists
+src/playlists/*
+!src/playlists/.gitkeep

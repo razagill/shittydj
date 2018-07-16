@@ -65,7 +65,8 @@ app.post('/createPlaylist', async (req, res) => {
   if (existingPlaylists.includes(name)) return res.status(400).send(`Playlist name ${name} is already taken`);
 
   try {
-    await file.mv(`${rootPath}/src/playlists/${name}`);
+    const filePath = `${rootPath}/src/playlists/${name}`;
+    await file.mv(filePath);
     res.redirect('/');
   } catch (er) {
     res.status(500).send(er)

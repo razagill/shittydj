@@ -3,6 +3,9 @@ import * as rootPath from 'app-root-path';
 import Player from './player/Player';
 import Provider from './providers/Provider';
 import * as fs from 'fs';
+import PlaylistsResponse from './models/dto/playlistsResponse';
+import { readFileLineByLine } from './toolkit/util';
+import PlaylistResponse from './models/dto/playlistResponse';
 const PORT = 4000;
 const player = Player.getInstance();
 
@@ -71,6 +74,22 @@ app.post('/createPlaylist', async (req, res) => {
   } catch (er) {
     res.status(500).send(er)
   }
+})
+
+app.get('/playlists', async (req, res) => {
+  let playlists = fs.readdirSync(`${rootPath}/src/playlists`);
+  playlists = playlists.filter((pl) => pl !== '.gitkeep');
+
+  const response = new PlaylistsResponse();
+  playlists.forEach((pl) => {
+    const playlistEntry = new PlaylistResponse();
+    const tracks = readFileLineByLine(`${rootPath}/src/playlists/${pl}`);
+    playlistEntry.name = pl;
+    playlistEntry.numberOfTracks = tracks.length;
+    response.playlists.push(playlistEntry);
+  });
+
+  res.send(response);
 })
 
 app.listen(PORT, () => {

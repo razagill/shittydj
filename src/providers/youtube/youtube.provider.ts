@@ -14,7 +14,7 @@ export default class YoutubeProvider implements IProvider {
     return YoutubeProvider.instance;
   }
 
-  public getSongStream = async (url: string) => {
+  public getSongStream = async (url:string) => {
     return ytdl(url, { filter: 'audioonly', quality: 'highestaudio' });
   }
 
@@ -23,4 +23,13 @@ export default class YoutubeProvider implements IProvider {
     return new YoutubeResponse(infos);
   }
 
+  public isValidURL = async (url:string) => {
+    try {
+      const isValid = await ytdl.validateURL(url); // validateURL returns a boolean value
+      return Promise.resolve(isValid);
+    }
+    catch {
+      return Promise.resolve(false);
+    }
+  }
 }

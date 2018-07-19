@@ -22,4 +22,17 @@ export default class BandcampProvider implements IProvider {
     const infos = await bandcamp.getDetails(url);
     return new BandcampResponse(infos);
   }
+
+  public isValidURL = async (url:string) => {
+    // Since bandcamp library doesn't have a validation method we'll use details for now
+    try {
+      const isValid = await bandcamp.getDetails(url);
+      if (isValid) {
+        return Promise.resolve(true);
+      }
+    }
+    catch(err) {
+      return Promise.resolve(false);
+    }
+  }
 }

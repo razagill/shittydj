@@ -1,13 +1,24 @@
 import * as ytdl from 'ytdl-core';
 import YoutubeResponse from '../../models/dto/youtubeResponse';
+import { IProvider } from '../../interfaces';
 
-export default class YoutubeProvider {
+export default class YoutubeProvider implements IProvider {
 
-  public getStream = async (url: string) => {
+  private constructor() {};
+  private static instance:YoutubeProvider;
+
+  static getInstance = () => {
+    if (!YoutubeProvider.instance) {
+      YoutubeProvider.instance = new YoutubeProvider();
+    }
+    return YoutubeProvider.instance;
+  }
+
+  public getSongStream = async (url: string) => {
     return ytdl(url, { filter: 'audioonly', quality: 'highestaudio' });
   }
 
-  public getInfo  = async (url: string): Promise<YoutubeResponse> => {
+  public getSongInfo  = async (url: string): Promise<YoutubeResponse> => {
     const infos = await ytdl.getInfo(url);
     return new YoutubeResponse(infos);
   }

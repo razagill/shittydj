@@ -14,8 +14,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/queueSong', async (req, res) => {
-  const provider = new Provider();
-  const newSong = await provider.getSong(req.body.songURL, req.body.providerType);
+  const newSong = await Provider.getSongInfo(req.body.songURL, req.body.providerType);
   if (player.add(newSong)) {
     res.redirect('/');
   } else {

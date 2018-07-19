@@ -6,10 +6,9 @@ import * as ffmpeg from 'fluent-ffmpeg';
 // Utils
 import { logger } from '../toolkit/util';
 // Constants
-import { PROVIDERS } from '../toolkit/const';
 // Models
 import SongModel from '../models/SongModel';
-import { YoutubeProvider, BandcampProvider } from '../providers';
+import Provider from '../providers/Provider';
 // Interfaces
 
 export default class Player {
@@ -22,9 +21,6 @@ export default class Player {
     }
     return Player.instance;
   }
-
-  private youtubeProvider = new YoutubeProvider();
-  private bandcampProvider = new BandcampProvider();
 
   private speaker;
   private decoder;
@@ -45,15 +41,6 @@ export default class Player {
   private handleSpeakerClose = () => {
     logger('# Speaker closed...')
     this.speaker.end();
-  }
-
-  private getProviderStream = async (url:string, type:PROVIDERS) => {
-    switch (type) {
-      case PROVIDERS.YOUTUBE:
-        return await this.youtubeProvider.getStream(url);
-      case PROVIDERS.BANDCAMP:
-        return await this.bandcampProvider.getStream(url);
-    }
   }
 
   private getFFmpegStream = (stream:any) =>
@@ -91,7 +78,7 @@ export default class Player {
       this.resume();
     } else if (this.queue.length > 0 && !this.isPlaying) {
       const nextSong:SongModel = this.queue[0];
-      const providerStream = await this.getProviderStream(nextSong.url, nextSong.providerType);
+      const providerStream = await Provider.getSongStream(nextSong.url, nextSong.providerType);
       this.stream = this.playStream(this.getFFmpegStream(providerStream));
       this.isPlaying = true;
       this.currentSong = nextSong;

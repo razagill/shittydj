@@ -1,21 +1,33 @@
 import { PROVIDERS } from '../toolkit/const';
 import { YoutubeProvider, BandcampProvider } from '../providers';
 import SongModel from '../models/SongModel';
+import { IProvider } from '../interfaces';
 
 export default class Provider {
-  private youtubeProvider = new YoutubeProvider();
-  private bandcampProvider = new BandcampProvider();
 
-  public getSong = async (url:string, type:PROVIDERS): Promise<SongModel> => {
-    let providerInfo;
+  static getProviderByType = (type:PROVIDERS):IProvider => {
     switch (type) {
       case PROVIDERS.YOUTUBE:
-        providerInfo = await this.youtubeProvider.getInfo(url);
-        break;
-      case PROVIDERS.BANDCAMP:
-        providerInfo = await this.bandcampProvider.getInfo(url);
-        break;
+        return YoutubeProvider.getInstance();
+      case PROVIDERS.YOUTUBE:
+        return BandcampProvider.getInstance();
+      default:
+        return null;
     }
-    return SongModel.mapProviderInfos(providerInfo, type, url);
   }
+
+  static getSongInfo = async (url:string, type:PROVIDERS): Promise<SongModel> => {
+    const provider = Provider.getProviderByType(type);
+    const songInfo = await provider.getSongInfo(url);
+
+    return SongModel.mapProviderInfos(songInfo, type, url);
+  }
+
+  static getSongStream = async (url:string, type:PROVIDERS): Promise<SongModel> => {
+    const provider = Provider.getProviderByType(type);
+    const songStream = await provider.getSongStream(url);
+
+    return songStream;
+  }
+
 }

@@ -148,4 +148,8 @@ export default class Player {
       });
     });
   }
+
+  public removeSong = (id:number) => {
+    this.queue = this.queue.splice(id, 1);
+  }
 }

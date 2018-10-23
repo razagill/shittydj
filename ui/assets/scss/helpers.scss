@@ -1,0 +1,19 @@
+.font-400 {font-weight: 400;}
+.font-700 {font-weight: 700;}
+
+.pointer {cursor: pointer;}
+
+.text-center {text-align: center;}
+
+.full-height {height: 100%;}
+.position-relative {position: relative;}
+.max-width-1000 {max-width: 1000px;}
+.margin-0-auto {margin: 0 auto;}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.float-left {float: left;}
+.float-right {float: right;}

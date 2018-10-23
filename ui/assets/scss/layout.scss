@@ -131,3 +131,45 @@ img.ico {
         }
     }
 }
+
+.hr {
+  border-bottom: 1px solid $font;
+  margin: 20px 0 10px;
+  height: 1px;
+  width: 100%;
+}
+
+.add-song-modal {
+    background: $gray;
+    bottom: 0;
+    box-sizing: border-box;
+    height: 100%;
+    opacity: 0;
+    padding: 15px;
+    position: absolute;
+    top: 0;
+    visibility: hidden;
+    width: 100%;
+    z-index: 300;
+    transition: opacity 0.5s, visibility 0s 0.5s;
+    &.visible {
+        transition: opacity 0.5s;
+        visibility: visible;
+        opacity: 1;
+    }
+    input, button {
+        border-radius: 3px;
+        border: 1px solid $font;
+        box-sizing: border-box;
+        font-size: 14px;
+        height: 35px;
+        outline: 0;
+        padding: 0 10px;
+        width: 100%;
+    }
+    button[type=submit]{
+      margin-top: 15px;
+      color: $black;
+      background: $font;
+    }
+}

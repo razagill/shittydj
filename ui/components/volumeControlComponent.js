@@ -1,6 +1,6 @@
 import { Component } from 'preact';
 
-export default class volumeControl extends Component {
+export default class VolumeControlComponent extends Component {
 
   constructor() {
     super();

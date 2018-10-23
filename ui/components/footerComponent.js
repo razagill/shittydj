@@ -1,7 +1,8 @@
 import { Component } from 'preact';
-import VolumeControl from './volumeControl';
+import VolumeControlComponent from './volumeControlComponent';
+import DurationComponent from './durationComponent';
 
-export default class Footer extends Component {
+export default class FooterComponent extends Component {
 
   constructor() {
     super();
@@ -31,11 +32,9 @@ export default class Footer extends Component {
           Streetlight Manifesto - Everything Goes Numb
         </div>
 
+        <VolumeControlComponent />
 
-        <VolumeControl />
-
-        <div class="duration-time">3:47 / 4:20</div>
-        <div class="duration" style="width: 64%;" />
+        <DurationComponent />
       </div>
     );
   }

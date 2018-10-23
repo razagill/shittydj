@@ -1,9 +1,27 @@
 import './style';
 import { Component } from 'preact';
-import FooterComponent from './components/footer';
+import FooterComponent from './components/footerComponent';
+import AddSongComponent from './components/addSongComponent';
+import SongListComponent from './components/songListComponent';
 
 export default class App extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      addSongModalVisible: true
+    };
+  }
+
+  toggleAddSongModal = () => {
+    this.setState({
+      addSongModalVisible: !this.state.addSongModalVisible
+    });
+  }
+
   render() {
+    const { addSongModalVisible } = this.state;
+
     return (
       <div class="full-height">
         <div class="header">
@@ -13,147 +31,21 @@ export default class App extends Component {
           <div class="max-width-1000 margin-0-auto">
             <h2 class="clearfix">
               Upcoming
-            <img class="ico ico-plus float-right" src="assets/img/ico/ico-plus.svg" />
+              <img class="ico ico-plus pointer float-right" src="assets/img/ico/ico-plus.svg" onClick={this.toggleAddSongModal}
+              />
             </h2>
           </div>
         </div>
 
         <div class="content max-width-1000 margin-0-auto">
-          <ul class="song-list">
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Relaxing Jazz & Bossa Nova Music Radio - 24/7 Chill Out Piano & Guitar Music Live Stream</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="clearfix">
-                <div class="song-img">
-                  <img src="assets/img/test-img.jpg" />
-                </div>
-                <div class="song-text">
-                  <h3>Guitar Music Live Stream & Bossa Nova Music Radio - 24/7 Chill Out Piano</h3>
-                </div>
-              </div>
-            </li>
-          </ul>
+          <SongListComponent />
         </div>
 
         <FooterComponent />
+
+        <div class={`add-song-modal clearfix ${addSongModalVisible ? 'visible' : ''}`}>
+          <AddSongComponent toggleAddSongModal={this.toggleAddSongModal} />
+        </div>
       </div>
     );
   }

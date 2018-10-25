@@ -1,0 +1,12 @@
+@value variables: "../../assets/css/variables.css";
+@value --headerHeight from variables;
+
+.header {
+  box-sizing: border-box;
+  height: --headerHeight;
+  left: 0;
+  padding: 10px 15px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}

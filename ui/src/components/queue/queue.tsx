@@ -14,6 +14,7 @@ class QueueComponent extends Component<any, any> {
             </div>
             <div className={styles.songText}>
               <h3 className={styles.songName}>Relaxing Jazz &amp; Bossa Nova Music Radio - 24/7 Chill Out Piano &amp; Guitar Music Live Stream</h3>
+              <p className={styles.songDesc}>SongDescription</p>
             </div>
           </div>
         </li>

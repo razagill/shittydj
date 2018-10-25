@@ -11,9 +11,14 @@
 }
 
 .songName {
-  font-weight: 500;
+  font-weight: 700;
   font-size: 15px;
   line-height: 20px;
+}
+
+.songDesc {
+  font-size: 12px;
+  line-height: 15px;
 }
 
 .songImgWrapper {

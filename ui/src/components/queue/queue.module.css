@@ -1,5 +1,5 @@
 @value variables: "../../assets/css/variables.css";
-@value --songImgWidth, --gray from variables;
+@value --songImgWidth, --gray, --songImgHeight from variables;
 
 .list li {
   border-bottom: 1px solid --gray;
@@ -11,19 +11,32 @@
 }
 
 .songName {
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+  margin-bottom: 3px;
+}
+
+.songDesc {
+  font-size: 11px;
+  line-height: 14px;
 }
 
 .songImgWrapper {
-  width: 150px;
   float: left;
+  width: --songImgWidth;
 }
 
 .songText {
-  padding-left: 10px;
-  float: left;
-  width: calc(100% - --songImgWidth);
   box-sizing: border-box;
+  float: left;
+  height: --songImgHeight;
+  overflow: hidden;
+  padding-left: 10px;
+  width: calc(100% - --songImgWidth);
+}
+
+.noResults {
+  text-align: center;
+  margin-top: 20px;
 }

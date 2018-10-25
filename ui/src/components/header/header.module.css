@@ -1,8 +1,3 @@
-
-
-@value variables: "../../assets/css/variables.css";
-@value --headerHeight, --fontColorActive from variables;
-
 .header {
     box-sizing: border-box;
     height: --headerHeight;
@@ -11,7 +6,6 @@
     position: fixed;
     top: 0;
     width: 100%;
-    color: --fontColorActive;
 }
 
 .logo {

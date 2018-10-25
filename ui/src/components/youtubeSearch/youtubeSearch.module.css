@@ -1,0 +1,7 @@
+.inputBtn {
+    composes: inputBtn from "../pasteLink/pasteLink.module.css";
+}
+
+.btn {
+    composes: btn from "../pasteLink/pasteLink.module.css";
+}

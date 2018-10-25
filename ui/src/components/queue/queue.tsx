@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
 import styles from './queue.module.css';
 import stylesHelpers from '../../assets/css/helpers.module.css'
-import TestImg from '../../assets/img/test-img.jpg';
 
-class QueueComponent extends Component<any, any> {
+interface IProps {
+  description?: string;
+  id: string;
+  img: string;
+  title: string;
+}
+
+class QueueComponent extends Component<IProps, any> {
   public render() {
+    const { description, id, img, title } = this.props;
+
     return (
-      <ul className={styles.list}>
-        <li>
-          <div className={stylesHelpers.clearfix}>
-            <div className={styles.songImgWrapper}>
-              <img src={TestImg} />
-            </div>
-            <div className={styles.songText}>
-              <h3 className={styles.songName}>Relaxing Jazz &amp; Bossa Nova Music Radio - 24/7 Chill Out Piano &amp; Guitar Music Live Stream</h3>
-              <p className={styles.songDesc}>SongDescription</p>
-            </div>
+      <li>
+        <div className={stylesHelpers.clearfix}>
+          <div className={styles.songImgWrapper}>
+            <img src={img} />
           </div>
-        </li>
-      </ul>
+          <div className={styles.songText}>
+            <h3 className={styles.songName}>{title}</h3>
+            {description && <p className={styles.songDesc}>{description}</p>}
+          </div>
+        </div>
+      </li>
     );
   }
 }

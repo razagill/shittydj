@@ -6,6 +6,8 @@ import * as fs from 'fs';
 import PlaylistsResponse from './models/dto/playlistsResponse';
 import { readFileLineByLine } from './toolkit/util';
 import PlaylistResponse from './models/dto/playlistResponse';
+import _ from 'lodash';
+
 const PORT = 4000;
 const player = Player.getInstance();
 
@@ -89,7 +91,93 @@ app.get('/playlists', async (req, res) => {
   });
 
   res.send(response);
-})
+});
+
+app.patch('/upvote/:song-url', (req, res) => {
+  const urlOfSongToUpvote = req.params['song-url'];
+
+  if (urlOfSongToUpvote == null) {
+    res.send(JSON.stringify('Song URL is null'));
+  }
+
+  const allSongs = player.queue;
+
+  if (allSongs.length == 0) {
+    res.send(JSON.stringify('Queue is empty'));
+  }
+
+  // TODO: what happens if there are more than one song that match the URL?
+  // legit can happen if the same song appears twice on the playlist
+  const foundSong = allSongs.find(song => song.url === urlOfSongToUpvote)
+
+  if (foundSong == null) {
+    res.send(JSON.stringify(`No songs were found for the url: ${urlOfSongToUpvote}`));
+  }
+
+  const ipOfRequest = req.connection.remoteAddress;
+
+  const userAlreadyVoted = foundSong.voters.find(voter => voter.sourceIp === ipOfRequest);
+
+  if (userAlreadyVoted != null) {
+
+    // user can change downvote to upvote
+    if (userAlreadyVoted.isUpVote == false) {
+      userAlreadyVoted.isUpVote = true;
+    } else {
+      res.send(JSON.stringify('User already voted for song'));
+    }
+  } else {
+    foundSong.voters.push( { sourceIp: ipOfRequest, isUpVote: true});
+  }
+
+  foundSong.votes++;
+
+  player.queue = _.orderBy(player.queue, ['votes'], ['desc']);
+
+  res.redirect('/');
+});
+
+app.patch('/downvote/:song-url/', (req, res) => {
+  const urlOfSongToUpvote = req.params['song-url'];
+
+  if (urlOfSongToUpvote == null) {
+    res.send(JSON.stringify('Song URL is null'));
+  }
+
+  const allSongs = player.queue;
+
+  if (allSongs.length == 0) {
+    res.send(JSON.stringify('Queue is empty'));
+  }
+
+  const foundSong = allSongs.find(song => song.url === urlOfSongToUpvote)
+
+  if (foundSong == null) {
+    res.send(JSON.stringify(`No songs were found for the url: ${urlOfSongToUpvote}`));
+  }
+
+  const ipOfRequest = req.connection.remoteAddress;
+
+  const userAlreadyVoted = foundSong.voters.find(voter => voter.sourceIp === ipOfRequest);
+
+  if (userAlreadyVoted != null) {
+
+    // user can change upvote to downvote
+    if (userAlreadyVoted.isUpVote == true) {
+      userAlreadyVoted.isUpVote = false;
+    } else {
+      res.send(JSON.stringify('User already voted for song'));
+    }
+  } else {
+    foundSong.voters.push( { sourceIp: ipOfRequest, isUpVote: false});
+  }
+
+  foundSong.votes--;
+
+  player.queue = _.orderBy(player.queue, ['votes'], ['desc']);
+
+  res.redirect('/');
+});
 
 app.listen(PORT, () => {
   console.log('Server listening on port ' + PORT);

@@ -113,6 +113,7 @@ export default class Player {
   public add = (song:SongModel) => {
     const songURLs = this.queue.map((song) => song.url);
     // Check if song is already there
+    // TODO: add song ID (uuid.v4())
     if (!songURLs.includes(song.url)) {
       this.queue.push(song);
       return true;

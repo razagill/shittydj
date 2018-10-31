@@ -7,6 +7,9 @@ export default class SongModel {
   artWork: string = '';
   url: string;
   providerType: PROVIDERS;
+  votes: number = 0;
+  voters: {sourceIp: string, isUpVote: boolean}[] = [];
+  // TODO: mac address
 
   public static mapProviderInfos = (infos: any, providerType:PROVIDERS, url:string) => {
     const newSong = new SongModel();
